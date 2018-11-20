@@ -5,7 +5,7 @@ export default [
   // },
   {
     label: "คำนำหน้า",
-    type: "select",
+    type: "radio",
     value: ["นาย", "นางสาว"]
   },
   {
@@ -51,6 +51,10 @@ export default [
     label: "เบอร์โทร",
     type: "text"
   },
+  {
+    label: "Line ID",
+    type: "text"
+  },
   // {
   //   label: "lineID",
   //   type: "text"
@@ -93,7 +97,7 @@ export default [
   },
   {
     label: "หอใน",
-    type: "select",
+    type: "checkbox",
     value: ["ไม่อยู่", "อยู่"]
   }
   // {

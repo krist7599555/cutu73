@@ -32,7 +32,7 @@
           :fixed-box="false"
           :original="false"
           :auto-crop="true"
-          :center-box="true"
+          :centerBox="true"
           @real-time="realTime"
           :high="false"
           @img-load="imgLoad"
@@ -76,7 +76,8 @@
 <script lang="ts">
 import Vue from "vue";
 // @ts-ignore
-import { VueCropper } from "vue-cropper";
+// import { VueCropper } from "vue-cropper";
+import VueCropper from "../components/vue-cropper/vue-cropper";
 export default Vue.extend({
   components: {
     VueCropper
@@ -153,38 +154,23 @@ export default Vue.extend({
       }
     },
     upload(blob: Blob) {
-      console.log(blob, typeof blob);
+      const loadingComponent = this.$loading.open({
+        container: null
+      });
       let data = new FormData();
       data.append("image", blob, this.filename);
-      this.$store.dispatch("upload", data).then(url => {
-        console.log("FINISH");
-        this.$emit("input", url);
-        this.modelSrc = ""; //.replace("http:", "https:");
-        this.time = "?t=" + new Date().getTime();
-      });
+      this.$store
+        .dispatch("upload", data)
+        .then(url => {
+          this.$emit("input", url);
+          this.modelSrc = "";
+          this.time = "?t=" + new Date().getTime();
+        })
+        .finally(loadingComponent.close);
     },
     realTime(data: any) {
       console.log("REALTIME", data);
     },
-    // down(type: string) {
-    //   // event.preventDefault()
-    //   var aLink = document.createElement("a");
-    //   aLink.download = "demo";
-    //   // 输出
-    //   if (type === "blob") {
-    //     this.$refs.cropper.getCropBlob(data => {
-    //       this.downImg = window.URL.createObjectURL(data);
-    //       aLink.href = window.URL.createObjectURL(data);
-    //       aLink.click();
-    //     });
-    //   } else {
-    //     this.$refs.cropper.getCropData(data => {
-    //       this.downImg = data;
-    //       aLink.href = data;
-    //       aLink.click();
-    //     });
-    //   }
-    // },
     uploadImg(e: any) {
       console.log("UPLOAD IMAGE");
       var file = e.target.files[0];
@@ -205,10 +191,8 @@ export default Vue.extend({
               e.target.result;
         this.modelSrc = data;
       };
-      // 转化为base64
-      // reader.readAsDataURL(file)
-      // 转化为blob
-      reader.readAsArrayBuffer(file);
+      // reader.readAsDataURL(file); // base64
+      reader.readAsArrayBuffer(file); // blob
     },
     imgLoad(msg: any) {
       console.log(msg);
@@ -252,7 +236,7 @@ export default Vue.extend({
 }
 
 .btn {
-  display: inline-block;
+  // display: inline-block;
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;

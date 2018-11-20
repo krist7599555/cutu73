@@ -45,8 +45,8 @@ Vue.config.productionTip = false;
 // import registerServiceWorker from './registerServiceWorker';
 // registerServiceWorker.u
 
-import VueCoreImageUpload from "vue-core-image-upload/src/vue-core-image-upload.vue";
-Vue.component("vue-core-image-upload", VueCoreImageUpload);
+// import VueCoreImageUpload from "vue-core-image-upload/src/vue-core-image-upload.vue";
+// Vue.component("vue-core-image-upload", VueCoreImageUpload);
 new Vue({
   router,
   store,

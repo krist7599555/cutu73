@@ -1,13 +1,5 @@
 <template lang="pug">
-form(@submit='submit' v-if='auth && form_result')
-  //- .field.is-narrow.is-horizontal
-  //-   .field-label.is-normal
-  //-     .label(style='white-space: normal') รูปภาพ
-  //-   .field-body
-  //-     .field
-  //-       .control
-  //-         figure.image
-  //-           imageUpload(:filename='form_result.รหัสนิสิต' v-model='form_result.image')
+form(@submit.prevent='submit' v-if='auth && form_result')
   .field.is-narrow.is-horizontal
     .field-label.is-normal
       .label(style='white-space: normal') รูปภาพ
@@ -21,38 +13,9 @@ form(@submit='submit' v-if='auth && form_result')
   )
     .field-label.is-normal
       .label(v-show='!lay.hidden_label') {{lay.label}}
-      //- .label.label__is-hidden-desktop(v-show='!lay.hidden_label' style='white-space: normal') {{lay.label}}
-      //- .label.label__is-hidden-touch(v-show='!lay.hidden_label' style='white-space: pre') {{lay.label}}
     .field-body
       .field
-        .control
-          p.help(v-if='lay.desc') {{lay.desc}}
-          template(v-if='lay.type == "hr"')
-            hr
-          template(v-if='lay.type == "br"')
-            br
-          template(v-else-if='lay.type == "checkbox"')
-            b-checkbox(v-model='form_result[lay.label]') {{lay.value[!!form_result[lay.label]]}}
-          template(v-else-if='lay.type == "disable"')
-            input.input(v-model='form_result[lay.label]' disabled)
-          template(v-else-if='lay.type == "text"')
-            input.input(v-model='form_result[lay.label]' :required='lay.required')
-          template(v-else-if='lay.type == "textarea"')
-            textarea.textarea(v-model='form_result[lay.label]' :placeholder="lay.placeholder" required)
-          template(v-else-if='lay.type == "select"')
-            .select.is-fullwidth {{lay.required}}
-              select(v-model='form_result[lay.label]' :required='lay.required')
-                option
-                option(v-for='v in lay.value' :value='v') {{v}}
-          template(v-else-if='lay.type == "rank"')
-            draggable(v-model='lay.value')
-              template(v-for='e in lay.value')
-                input.input(v-if='e.type == "input"' v-model='e.name' :placeholder='e.placeholder')
-                .button.is-fullwidth(v-else) {{e.name || e}}
-                  .drag-icon 
-                    i.fa.fa-bars
-          template(v-else)
-            input.input(disabled :value='`unrender type: ${lay.type}`')
+        MyInput(:value='form_result[lay.label]' @input='handleInput($event, lay.label)' :lay='lay')
   .field.is-narrow.is-horizontal
     .field-label.is-normal
     .field-body
@@ -60,7 +23,6 @@ form(@submit='submit' v-if='auth && form_result')
         .control
           br
           button.button.is-danger.is-outlined.is-inverted(type='submit') SUBMIT
-          label.help-is-success
 </template>
 
 <script lang="ts">
@@ -73,15 +35,15 @@ interface InputField {
 import Vue from "vue";
 // @ts-ignore
 import draggable from "vuedraggable";
-import imageUpload from "./imageUpload.vue";
-import _ from "lodash";
+import MyInput from "./MyInput.vue";
 import File from "./File.vue";
+import _ from "lodash";
 
 export default Vue.extend({
   components: {
     draggable,
-    imageUpload,
-    File
+    File,
+    MyInput
   },
   data() {
     let layout = require("./input_form.js").default;
@@ -124,6 +86,11 @@ export default Vue.extend({
     }
   },
   methods: {
+    handleInput(e: any, label: string) {
+      console.log("handleUpdate", e.target.value);
+      this.$set(this.form_result, label, e.target.value);
+      this.$forceUpdate();
+    },
     update_result() {
       for (let { label, type, value } of this.form_layout) {
         if (!label) continue;
@@ -136,14 +103,17 @@ export default Vue.extend({
       _.map(this.form_result, (v, k) => {
         if (k == "คำนำหน้า") {
           // @ts-ignore
-          this.form_result["เพศ"] = { นาย: "ชาย", นางสาว: "หญิง" }[v] || "";
+          this.form_result["เพศ"] = _.get(
+            { นาย: "ชาย", นางสาว: "หญิง" },
+            v,
+            ""
+          );
         }
       });
       this.form_result = this.form_result;
       this.$forceUpdate();
     },
-    async submit(e: Event) {
-      e.preventDefault();
+    async submit() {
       const loadingComponent = this.$loading.open({
         container: null
       });
@@ -154,15 +124,15 @@ export default Vue.extend({
             type: "is-success",
             message: "success submition",
             position: "is-top",
-            duration: 5000
+            duration: 3000
           })
         )
         .catch(result => {
           this.$toast.open({
             type: "is-danger",
-            message: result.response.data || "unexpected error",
+            message: _.get(result, "response.data") || "unexpected error",
             position: "is-top",
-            duration: 5000
+            duration: 3000
           });
           if (result.code == 405) {
             window.location.reload(true);
@@ -187,5 +157,3 @@ export default Vue.extend({
   }
 });
 </script>
-
-<style lang="scss" scoped></style>
