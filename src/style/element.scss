@@ -1,0 +1,123 @@
+* {
+  font-family: ChulaNew;
+}
+
+.container {
+  @media (min-width: 600px) {
+    max-width: 300px;
+  }
+  @media (min-width: 900px) {
+    max-width: 600px;
+  }
+}
+
+.button.is-inverted.is-outlined {
+  font-family: ChulaNew;
+  transition-duration: 0.1s;
+  &:hover,
+  &:focus {
+    color: white !important;
+    background-color: #fff1f457 !important;
+    box-shadow: none;
+  }
+}
+
+.container {
+  @media (min-width: 600px) {
+    max-width: 400px;
+  }
+  @media (min-width: 900px) {
+    max-width: 600px !important;
+  }
+}
+
+.field-label .label {
+  color: white;
+}
+
+.input, 
+.button,
+.textarea,
+.select select,
+.input[disabled] {
+  &, 
+  &:hover, 
+  &:focus {
+    background-color: #fff0 !important;
+    border: solid #fff 1px !important;
+    color: white !important;
+    text-align: center;
+    font-family: ChulaNew;
+    box-shadow: none !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    text-align-last: center;
+  }
+}
+.input[type=file],
+.input[type="file"] {
+  text-align-last: left;
+}
+
+.select:not(.is-multiple):not(.is-loading)::after {
+  border-color: white !important;
+}
+.select select {
+  padding-left: 40px;
+}
+
+$mobile: 550px;
+
+.help {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.3rem !important;
+}
+
+.box {
+  max-width: $mobile;
+  @media (max-width: $mobile) {
+    border-radius: 0;
+  }
+}
+
+.section {
+  background-image: linear-gradient(#ea8094, #efcae3);
+  @media (max-width: $mobile) {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+.field-label {
+  @media (min-width: 769px) {
+    flex-grow: 1.6;
+  }
+}
+
+.drag-icon {
+  position: absolute;
+  left: 7px;
+  color: #3636364b
+}
+
+$form-breakpoint: 768px;
+.label__is-hidden-desktop { // touch
+  @media screen and (min-width: $form-breakpoint + 1) {
+    display: none !important;
+  }
+}
+.label__is-hidden-touch { // desktop
+  @media screen and (max-width: $form-breakpoint) {
+    display: none !important;
+  }
+}
+.help {
+  @media screen and (max-width: $form-breakpoint) {
+    margin-top: -0.5rem !important;
+  }
+}
+
+.hero-body {
+  padding-top: 5rem !important;
+  padding-bottom: 5rem !important;
+}

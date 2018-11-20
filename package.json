@@ -1,0 +1,64 @@
+{
+  "name": "help",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "production": "NODE_ENV=production yarn build && rsync -r ./dist/* root@128.199.216.159:/var/www/cutu73"
+  },
+  "dependencies": {
+    "@types/js-cookie": "^2.2.0",
+    "@types/lodash": "^4.14.118",
+    "axios": "^0.18.0",
+    "buefy": "^0.7.0",
+    "bulma": "^0.7.2",
+    "es-cookies": "^2.1.18",
+    "express": "^4.16.4",
+    "firebase": "^5.5.4",
+    "fs": "^0.0.1-security",
+    "js-cookie": "^2.2.0",
+    "js-cookies": "^1.0.4",
+    "lodash": "^4.17.11",
+    "register-service-worker": "^1.0.0",
+    "vue": "^2.5.17",
+    "vue-cookies": "^1.5.7",
+    "vue-core-image-upload": "^2.4.11",
+    "vue-cropper": "^0.4.6",
+    "vue-property-decorator": "^7.2.0",
+    "vue-router": "^3.0.1",
+    "vuedraggable": "^2.16.0",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.5",
+    "@vue/cli-plugin-eslint": "^3.0.5",
+    "@vue/cli-plugin-pwa": "^3.0.5",
+    "@vue/cli-plugin-typescript": "^3.0.5",
+    "@vue/cli-service": "^3.0.5",
+    "@vue/eslint-config-prettier": "^4.0.0",
+    "@vue/eslint-config-typescript": "^3.1.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0-0",
+    "lint-staged": "^7.2.2",
+    "node-sass": "^4.9.0",
+    "pug": "^2.0.3",
+    "pug-loader": "^2.4.0",
+    "pug-plain-loader": "^1.0.0",
+    "sass-loader": "^7.0.1",
+    "typescript": "^3.0.0",
+    "vue-class-component": "^6.3.2",
+    "vue-template-compiler": "^2.5.17"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}

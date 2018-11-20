@@ -1,0 +1,37 @@
+{
+  "21": { "th": "วิศวกรรมศาสตร์", "en": "ENGINEERING" },
+  "22": { "th": "อักษรศาสตร์", "en": "ARTS" },
+  "23": { "th": "วิทยาศาสตร์", "en": "SCIENCE" },
+  "24": { "th": "รัฐศาสตร์", "en": "POLITICAL SCIENCE" },
+  "25": { "th": "สถาปัตยกรรมศาสตร์", "en": "ARCHITECTURE" },
+  "26": {
+    "th": "พาณิชยศาสตร์และการบัญชี",
+    "en": "COMMERCE AND ACCOUNTANCY"
+  },
+  "27": { "th": "ครุศาสตร์", "en": "EDUCATION" },
+  "28": { "th": "นิเทศศาสตร์", "en": "COMMUNICATION ARTS" },
+  "29": { "th": "เศรษฐศาสตร์", "en": "ECONOMICS" },
+  "30": { "th": "แพทยศาสตร์", "en": "MEDICINE" },
+  "31": { "th": "สัตวแพทยศาสตร์", "en": "VETERINARY SCIENCE" },
+  "32": { "th": "ทันตแพทยศาสตร์", "en": "DENTISTRY" },
+  "33": {
+    "th": "เภสัชศาสตร์",
+    "en": "PHARMACEUTICAL SCIENCES"
+  },
+  "34": { "th": "นิติศาสตร์", "en": "LAW" },
+  "35": {
+    "th": "ศิลปกรรมศาสตร์",
+    "en": "FINE AND APPLIED ARTS"
+  },
+  "36": { "th": "พยาบาลศาสตร์", "en": "NURSING" },
+  "37": {
+    "th": "สหเวชศาสตร์",
+    "en": "ALLIED HEALTH SCIENCES"
+  },
+  "38": { "th": "จิตวิทยา", "en": "PSYCHOLOGY" },
+  "39": { "th": "วิทยาศาสตร์การกีฬา", "en": "SPORTS SCIENCE" },
+  "40": {
+    "th": "สํานักวิชาทรัพยากรการเกษตร",
+    "en": "SCHOOL OF AGRICULTURAL"
+  }
+}

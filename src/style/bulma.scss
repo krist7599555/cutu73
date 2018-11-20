@@ -1,0 +1,86 @@
+@charset "utf-8";
+
+@import "~bulma/sass/utilities/_all";
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+
+// Set your brand colors
+// $green: #39d27d;
+$green: #54ce98;
+// $green: red;//#54e0a3;
+$red: #fa5f7e;
+$purple: #9463d2;
+$pink: #FA7C91;
+$brown: #757763;
+$yellow: #eedf6e; 
+$yellow: #f9e869;
+$yellow: #efe389;
+$beige-light: #D0D1CD;
+$beige-lighter: #EFF0EB;
+// $green-dark: rgb(4, 155, 62);
+
+@font-face {
+    font-family: ChulaNew;
+    font-weight: normal;
+    src: url(./chulalongkornreg-webfont.woff2);
+}
+@font-face {
+    font-family: ChulaNew;
+    font-weight: bold;
+    src: url(./chulalongkornbold-webfont.woff2);
+}
+
+$family-sans-serif: ChulaNew, "Nunito", sans-serif;
+$success: $green;
+$danger: $red;
+$warning: $yellow;
+$grey-dark: $brown;
+$grey-light: $beige-light;
+$primary: $purple;
+$link: $pink;
+$widescreen-enabled: false;
+$fullhd-enabled: false;
+
+$footer-background-color: #363636;
+
+$colors: (
+  "white": ($white, $black),
+  "black": ($black, $white),
+  "light": ($light, $light-invert),
+  "dark": ($dark, $dark-invert),
+  "primary": ($primary, $primary-invert),
+  "info": ($info, $info-invert),
+  "success": ($success, $success-invert),
+  "warning": ($warning, $warning-invert),
+  "danger": ($danger, $danger-invert),
+  // "twitter": ($twitter, $twitter-invert)
+);
+
+
+// Update some of Bulma's component variables
+// $body-background-color: $beige-lighter;
+// $control-border-width: 2px;
+// $input-border-color: transparent;
+// $input-shadow: none;
+
+// Import Bulma and Buefy styles
+@import "../../node_modules/bulma/bulma";
+// @import "../../node_modules/bulma/sass/base/_all";
+// @import "../../node_modules/bulma/sass/utilities/_all";
+// @import "../../node_modules/bulma/sass/layout/_all";
+// @import "../../node_modules/bulma/sass/elements/_all";
+// @import "../../node_modules/bulma/sass/components/dropdown";
+// @import "../../node_modules/bulma/sass/utilities/";
+@import "../../node_modules/buefy/src/scss/buefy";
+// @import "../../node_modules/buefy/src/scss/components/_checkbox";
+// @import "../../node_modules/buefy/src/scss/buefy";
+// Import only what you need from Bulma
+// @import "../../node_modules/bulma/bulma.sass";
+// @import "../node_modules/bulma/sass/utilities/_all.sass";
+// @import "../node_modules/bulma/sass/base/_all.sass";
+// @import "../node_modules/bulma/sass/elements/button.sass";
+// @import "../node_modules/bulma/sass/elements/container.sass";
+// @import "../node_modules/bulma/sass/elements/form.sass";
+// @import "../node_modules/bulma/sass/elements/title.sass";
+// @import "../node_modules/bulma/sass/layout/hero.sass";
+// @import "../node_modules/bulma/sass/layout/section.sass";

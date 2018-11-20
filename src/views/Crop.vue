@@ -1,0 +1,245 @@
+<template>
+  <div>
+    <div class="cut">
+      <vue-cropper ref="cropper" :img="option.img"></vue-cropper>
+    </div>
+    <div class="test-button">
+      <button @click="changeImg" class="btn">changeImg</button>
+      <label class="btn" for="uploads">upload</label>
+
+      <input
+        type="file"
+        id="uploads"
+        style="position:absolute; clip:rect(0 0 0 0);"
+        accept="image/png, image/jpeg, image/gif, image/jpg"
+        @change="uploadImg($event, 1);"
+      />
+
+      <button @click="startCrop" v-if="!crap" class="btn">start</button>
+      <button @click="stopCrop" v-else class="btn">stop</button>
+      <button @click="clearCrop" class="btn">clear</button>
+      <button @click="refreshCrop" class="btn">refresh</button>
+      <button @click="changeScale(1);" class="btn">+</button>
+      <button @click="changeScale(-1);" class="btn">-</button>
+      <button @click="rotateLeft" class="btn">rotateLeft</button>
+      <button @click="rotateRight" class="btn">rotateRight</button>
+      <button @click="finish('base64');" class="btn">preview(base64)</button>
+      <button @click="finish('blob');" class="btn">preview(blob)</button>
+      <a @click="down('base64');" class="btn">download(base64)</a>
+      <a @click="down('blob');" class="btn">download(blob)</a>
+    </div>
+    <!--
+      <div
+        class="show-preview"
+        :style="{
+          width: previews.w + 'px',
+          height: previews.h + 'px',
+          overflow: 'hidden',
+          margin: '5px'
+        }"
+      >
+        <div :style="previews.div">
+          <img :src="previews.url" :style="previews.img" />
+        </div>
+      </div>
+    -->
+  </div>
+</template>
+
+<script>
+import { VueCropper } from "vue-cropper";
+export default {
+  components: {
+    VueCropper
+  },
+  data() {
+    return {
+      model: false,
+      modelSrc: "",
+      crap: false,
+      previews: {},
+      lists: [
+        {
+          img: "https://qn-qn-kibey-static-cdn.app-echo.com/goodboy-weixin.PNG"
+        },
+        {
+          img: "https://avatars2.githubusercontent.com/u/15681693?s=460&v=4"
+        }
+      ],
+      option: {
+        img: "https://qn-qn-kibey-static-cdn.app-echo.com/goodboy-weixin.PNG",
+        size: 1,
+        full: true,
+        outputType: "png",
+        canMove: true,
+        fixedBox: false,
+        original: false,
+        canMoveBox: true,
+        autoCrop: true,
+        canScale: true,
+        // autoCrop: true,
+        // 只有自动截图开启 宽度高度才生效
+        // autoCropWidth: 30,
+        // autoCropHeight: 40,
+        centerBox: true,
+        high: false,
+        fixedNumber: [3, 4],
+        fixed: true,
+        infoTrue: true
+      },
+      show: true
+    };
+  },
+  methods: {
+    changeImg() {
+      this.option.img = this.lists[~~(Math.random() * this.lists.length)].img;
+    },
+    startCrop() {
+      // start
+      this.crap = true;
+      this.$refs.cropper.startCrop();
+    },
+    stopCrop() {
+      //  stop
+      this.crap = false;
+      this.$refs.cropper.stopCrop();
+    },
+    clearCrop() {
+      // clear
+      this.$refs.cropper.clearCrop();
+    },
+    refreshCrop() {
+      // clear
+      this.$refs.cropper.refresh();
+    },
+    changeScale(num) {
+      num = num || 1;
+      this.$refs.cropper.changeScale(num);
+    },
+    rotateLeft() {
+      this.$refs.cropper.rotateLeft();
+    },
+    rotateRight() {
+      this.$refs.cropper.rotateRight();
+    },
+    finish(type) {
+      // 输出
+      // var test = window.open('about:blank')
+      // test.document.body.innerHTML = '图片生成中..'
+      if (type === "blob") {
+        this.$refs.cropper.getCropBlob(data => {
+          console.log(data);
+          var img = window.URL.createObjectURL(data);
+          this.model = true;
+          this.modelSrc = img;
+        });
+      } else {
+        this.$refs.cropper.getCropData(data => {
+          this.model = true;
+          this.modelSrc = data;
+        });
+      }
+    },
+    // 实时预览函数
+    realTime(data) {
+      this.previews = data;
+      console.log(data);
+    },
+
+    finish2(type) {
+      this.$refs.cropper2.getCropData(data => {
+        this.model = true;
+        this.modelSrc = data;
+      });
+    },
+    finish3(type) {
+      this.$refs.cropper3.getCropData(data => {
+        this.model = true;
+        this.modelSrc = data;
+      });
+    },
+    down(type) {
+      // event.preventDefault()
+      var aLink = document.createElement("a");
+      aLink.download = "demo";
+      // 输出
+      if (type === "blob") {
+        this.$refs.cropper.getCropBlob(data => {
+          this.downImg = window.URL.createObjectURL(data);
+          aLink.href = window.URL.createObjectURL(data);
+          aLink.click();
+        });
+      } else {
+        this.$refs.cropper.getCropData(data => {
+          this.downImg = data;
+          aLink.href = data;
+          aLink.click();
+        });
+      }
+    },
+
+    uploadImg(e, num) {
+      //上传图片
+      // this.option.img
+      var file = e.target.files[0];
+      if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+        alert("图片类型必须是.gif,jpeg,jpg,png,bmp中的一种");
+        return false;
+      }
+      var reader = new FileReader();
+      reader.onload = e => {
+        let data;
+        if (typeof e.target.result === "object") {
+          // 把Array Buffer转化为blob 如果是base64不需要
+          data = window.URL.createObjectURL(new Blob([e.target.result]));
+        } else {
+          data = e.target.result;
+        }
+        if (num === 1) {
+          this.option.img = data;
+        } else if (num === 2) {
+          this.example2.img = data;
+        }
+      };
+      // 转化为base64
+      // reader.readAsDataURL(file)
+      // 转化为blob
+      reader.readAsArrayBuffer(file);
+    },
+    imgLoad(msg) {
+      console.log(msg);
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.cut {
+  width: 500px;
+  height: 500px;
+  margin: 30px auto;
+}
+
+.btn {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #c0ccda;
+  color: #1f2d3d;
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  margin: 20px 10px 0px 0px;
+  padding: 9px 15px;
+  font-size: 14px;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #50bfff;
+  border-color: #50bfff;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  user-select: none;
+}
+</style>
