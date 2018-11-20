@@ -32,16 +32,16 @@ import "./style/all.scss";
 
 Vue.config.productionTip = false;
 
-import firebase from "firebase/app";
-var config = {
-  apiKey: "AIzaSyCFiD4b_wrKGToaYgpOIrzDoasUlPVq0as",
-  authDomain: "cutu73-e9eff.firebaseapp.com",
-  databaseURL: "https://cutu73-e9eff.firebaseio.com",
-  projectId: "cutu73-e9eff",
-  storageBucket: "",
-  messagingSenderId: "358105585257"
-};
-firebase.initializeApp(config);
+// import firebase from "firebase/app";
+// var config = {
+//   apiKey: "AIzaSyCFiD4b_wrKGToaYgpOIrzDoasUlPVq0as",
+//   authDomain: "cutu73-e9eff.firebaseapp.com",
+//   databaseURL: "https://cutu73-e9eff.firebaseio.com",
+//   projectId: "cutu73-e9eff",
+//   storageBucket: "",
+//   messagingSenderId: "358105585257"
+// };
+// firebase.initializeApp(config);
 // import registerServiceWorker from './registerServiceWorker';
 // registerServiceWorker.u
 
