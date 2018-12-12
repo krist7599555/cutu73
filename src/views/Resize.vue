@@ -3,19 +3,20 @@
     <div>
       <input
         type="file"
-        ref="uploadSelect"
+        id="uploads"
         :class="className"
         style="text-align-last: left"
         accept="image/png, image/jpeg, image/gif, image/jpg"
-        @change="uploadImg($event);"
+        @change="uploadImg($event, 1);"
       />
+      <!-- style="position:absolute; clip:rect(0 0 0 0);" -->
     </div>
     <div v-if="value && !modelSrc">
       <figure class="image"><img :src="value + time" /></figure>
     </div>
     <div v-if="modelSrc" style="position: fixed; top: 0; left: 0; z-index: 6">
       <div class="model" v-show="model" @click="model = false;">
-        <div class="model-show"><img :src="modelSrc" alt /></div>
+        <div class="model-show"><img :src="modelSrc" alt="" /></div>
       </div>
 
       <div class="cut">
@@ -32,7 +33,9 @@
           :original="false"
           :auto-crop="true"
           :centerBox="true"
+          @real-time="realTime"
           :high="false"
+          @img-load="imgLoad"
           :fixedNumber="[3, 4]"
           :fixed="true"
           :canScale="true"
@@ -40,10 +43,31 @@
         ></vue-cropper>
       </div>
       <div class="test-button" style="position: absolute; right: 0; top: 0;">
-        <button type="button" class="btn" @click="finish('blob');">
-          finish
-        </button>
-        <button type="button" class="btn" @click="cancel">cancel</button>
+        <button class="btn" @click="finish('blob');">finish</button>
+        <!-- <button class="btn" @click="finish('base64');">base64</button> -->
+        <button class="btn" @click="img = '';">cancel</button>
+        <!-- <label class="btn" for="uploads">upload</label> -->
+        <!--
+          <input
+            type="file"
+            id="uploads"
+            style="position:absolute; clip:rect(0 0 0 0);"
+            accept="image/png, image/jpeg, image/gif, image/jpg"
+            @change="uploadImg($event, 1);"
+          />
+        -->
+        <!--
+          <button @click="startCrop" v-if="!crap" class="btn">start</button>
+          <button @click="stopCrop" v-else class="btn">stop</button>
+          <button @click="clearCrop" class="btn">clear</button>
+          <button @click="refreshCrop" class="btn">refresh</button>
+          <button @click="changeScale(1);" class="btn">+</button>
+          <button @click="changeScale(-1);" class="btn">-</button>
+          <button @click="finish('base64');" class="btn">preview(base64)</button>
+          <button @click="finish('blob');" class="btn">preview(blob)</button>
+          <a @click="down('base64');" class="btn">download(base64)</a>
+          <a @click="down('blob');" class="btn">download(blob)</a>
+        -->
       </div>
     </div>
   </div>
@@ -51,7 +75,9 @@
 
 <script lang="ts">
 import Vue from "vue";
-import compressBlob from "./blobImageResize";
+
+// @ts-ignore
+import gm from "gm";
 // @ts-ignore
 // import { VueCropper } from "vue-cropper";
 import VueCropper from "../components/vue-cropper/vue-cropper";
@@ -82,20 +108,24 @@ export default Vue.extend({
   },
   methods: {
     startCrop() {
+      // start
       this.crap = true;
       // @ts-ignore
       this.$refs.cropper.startCrop();
     },
     stopCrop() {
+      //  stop
       this.crap = false;
       // @ts-ignore
       this.$refs.cropper.stopCrop();
     },
     clearCrop() {
+      // clear
       // @ts-ignore
       this.$refs.cropper.clearCrop();
     },
     refreshCrop() {
+      // clear
       // @ts-ignore
       this.$refs.cropper.refresh();
     },
@@ -104,57 +134,74 @@ export default Vue.extend({
       // @ts-ignore
       this.$refs.cropper.changeScale(num);
     },
-    cancel() {
-      this.modelSrc = "";
-      // @ts-ignore
-      this.$refs.uploadSelect.value = "";
-    },
     finish(type: string) {
+      // 输出
+      // var test = window.open('about:blank')
+      // test.document.body.innerHTML = '图片生成中..'
       if (type === "blob") {
         // @ts-ignore
         this.$refs.cropper.getCropBlob(data => {
+          console.log(data);
+          // this.model = true;
+          this.modelSrc = window.URL.createObjectURL(data);
           this.upload(data);
         });
       } else {
         throw "base 64 not implement";
+        // // @ts-ignore
+        // this.$refs.cropper.getCropData(data => {
+        //   // this.model = true;
+        //   this.modelSrc = data;
+        //   this.$emit("input", data);
+        // });
       }
     },
-    async upload(blob: Blob) {
+    upload(blob: Blob) {
       const loadingComponent = this.$loading.open({
         container: null
       });
-      let data = new FormData();
-      data.append("image", await compressBlob(blob), this.filename);
-      await this.$store
-        .dispatch("upload", data)
-        .then(url => {
-          this.$emit("input", url);
-          this.modelSrc = "";
-          this.time = "?t=" + new Date().getTime();
-        })
-        .catch(err => {
-          alert("error occur via upload");
-        })
-        .finally(() => {
-          // @ts-ignore
-          this.$refs.uploadSelect.value = "";
-          loadingComponent.close();
-        });
 
-      // MAKE MORE BACK UP AS MANY TYPE
-      for (const typ of ["jpeg", "png"]) {
-        let data = new FormData();
-        data.append(
-          "image",
-          await compressBlob(blob, { type: "image/" + typ }),
-          this.filename + "." + typ
-        );
-        this.$store.dispatch("upload", data).then(res => {
-          // console.log(typ, ":", res);
-        });
-      }
+      // console.log(URL.createObjectURL(blob));
+
+      // var reader = new FileReader();
+      // let data = "";
+      // reader.onload = e => {
+      //   data = window.URL.createObjectURL([blob]);
+      //   console.log(data);
+      // };
+      // console.log(data);
+      // // reader.readAsDataURL(file); // base64
+      // reader.readAsArrayBuffer(blob); // blob
+
+      // fr.s
+      gm("http://cutu73.sgp1.digitaloceanspaces.com/6031301721");
+      //   .resize(100, 100);
+      //   .toBuffer("PNG", function(err: any, buffer: any) {
+      // return console.log(err || "success");
+      // console.log("done!");
+      // });
+      // let data = new FormData();
+
+      // data.append("image", blob, this.filename);
+      console.error("SKIP THIS");
+      // this.$store
+      //   .dispatch("upload", data)
+      //   .then(url => {
+      //     this.$emit("input", url);
+      //     this.modelSrc = "";
+      //     this.time = "?t=" + new Date().getTime();
+      //   })
+      //   .catch(err => {
+      //     alert("error occur via upload");
+      //   })
+      //   .finally(loadingComponent.close);
+      loadingComponent.close();
+    },
+    realTime(data: any) {
+      console.log("REALTIME", data);
     },
     uploadImg(e: any) {
+      console.log("UPLOAD IMAGE");
       var file = e.target.files[0];
       if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
         alert("no image select");
@@ -175,6 +222,9 @@ export default Vue.extend({
       };
       // reader.readAsDataURL(file); // base64
       reader.readAsArrayBuffer(file); // blob
+    },
+    imgLoad(msg: any) {
+      console.log(msg);
     }
   }
 });

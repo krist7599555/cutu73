@@ -28,7 +28,9 @@ const url =
   process.env.NODE_ENV == "production"
     ? "/api/v1"
     : "http://localhost:3000/api/v1";
-
+// : "http://128.199.216.159:3000/api/v1";
+// : "http://localhost:3000/api/v1";
+// "http://128.199.216.159:3000/api/v1"
 export default new Vuex.Store({
   state: {
     user: null as null | object,
@@ -80,7 +82,7 @@ export default new Vuex.Store({
       return state.dispatch("fetchUser");
     },
     async submit(state, formResult) {
-      console.log("form submit EMPTY result is", formResult);
+      // console.log("form submit EMPTY result is", formResult);
       return axios({
         method: "POST",
         url: url + "/user/register",
@@ -94,7 +96,7 @@ export default new Vuex.Store({
     },
     async upload(state, formData) {
       const endpoint = url + "/user/upload";
-      console.log("upload to", endpoint);
+      // console.log("upload to", endpoint);
       return await axios({
         method: "POST",
         url: endpoint,
@@ -122,7 +124,7 @@ export default new Vuex.Store({
           return state.getters.user;
         });
       } else {
-        console.log("set User to Null");
+        // console.log("set User to Null");
         state.commit("setUser", null);
         state.commit("removeTicket");
       }

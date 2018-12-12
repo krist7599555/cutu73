@@ -87,7 +87,7 @@ export default Vue.extend({
   },
   methods: {
     handleInput(e: any, label: string) {
-      console.log("handleUpdate", e.target.value);
+      // console.log("handleUpdate", e.target.value);
       this.$set(this.form_result, label, e.target.value);
       this.$forceUpdate();
     },
@@ -117,6 +117,7 @@ export default Vue.extend({
       const loadingComponent = this.$loading.open({
         container: null
       });
+      console.log("SUBMIT");
       this.$store
         .dispatch("submit", this.form_result)
         .then(() =>

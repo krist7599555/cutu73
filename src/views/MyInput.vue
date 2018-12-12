@@ -64,7 +64,7 @@ export default Vue.extend({
   methods: {
     emit_input(e: any) {
       if (typeof e == "string") e = { target: { value: e } };
-      console.log("input", e);
+      // console.log("input", e);
       this.$emit("input", e);
     }
   }

@@ -82,9 +82,9 @@
         @mousedown="cropMove"
         @touchstart="cropMove"
       ></span>
-      <span class="crop-info" v-if="info" :style="{ top: cropInfo.top }">
-        {{ this.cropInfo.width }} × {{ this.cropInfo.height }}
-      </span>
+      <span class="crop-info" v-if="info" :style="{ top: cropInfo.top }"
+        >{{ this.cropInfo.width }} × {{ this.cropInfo.height }}</span
+      >
       <span v-if="!fixedBox">
         <span
           class="crop-line line-w"
@@ -1252,7 +1252,7 @@ export default {
           }
           if ((this.enlarge !== 1) & !this.full) {
             dpr = Math.abs(Number(this.enlarge));
-            console.log(dpr);
+            // console.log(dpr);
           }
           let width = this.cropW * dpr;
           let height = this.cropH * dpr;
@@ -1553,15 +1553,15 @@ export default {
         w = maxWidth * 0.8;
         h = maxHeight * 0.8;
       }
-      console.log("MAX", maxWidth, maxHeight); // REAL PICTURE
-      console.log("REF", this.w, this.h);
+      // console.log("MAX", maxWidth, maxHeight); // REAL PICTURE
+      // console.log("REF", this.w, this.h);
       w = w > maxWidth ? maxWidth : w;
       h = h > maxHeight ? maxHeight : h;
-      console.log(w, h);
+      // console.log(w, h);
       if (this.fixed) {
         h = (w / this.fixedNumber[0]) * this.fixedNumber[1];
       }
-      console.log(w, h);
+      // console.log(w, h);
       // 如果比例之后 高度大于h
       if (h > maxHeight) {
         let scale = h / maxHeight;
@@ -1573,7 +1573,7 @@ export default {
         h /= scale;
         w /= scale;
       }
-      console.log(w, h);
+      // console.log(w, h);
       this.changeCrop(w, h);
     },
     // 手动改变截图框大小函数
