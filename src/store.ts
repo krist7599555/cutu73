@@ -28,9 +28,7 @@ const url =
   process.env.NODE_ENV == "production"
     ? "/api/v1"
     : "http://www.cutu73.ml/api/v1";
-// : "http://128.199.216.159:3000/api/v1";
-// : "http://localhost:3000/api/v1";
-// "http://128.199.216.159:3000/api/v1"
+
 export default new Vuex.Store({
   state: {
     user: null as null | object,
