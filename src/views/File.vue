@@ -1,17 +1,27 @@
 <template>
   <div>
     <div>
-      <input
-        type="file"
-        ref="uploadSelect"
-        :class="className"
-        style="text-align-last: left"
-        accept="image/png, image/jpeg, image/gif, image/jpg"
-        @change="uploadImg($event);"
-      />
+      <b-field class="file">
+        <b-upload
+          v-model="file"
+          @input="uploadImg($event);"
+          accept="image/png, image/jpeg, image/gif, image/jpg"
+          :multiple="false"
+          :drag-drop="false"
+        >
+          <a class="button is-primary is-fullwidth">
+            <b-icon pack="fas" icon="file-image"></b-icon>
+            <span>Click to upload</span>
+          </a>
+        </b-upload>
+        <!-- <span class="file-name" v-if="file">{{ file.name }}</span> -->
+      </b-field>
     </div>
+    <div style="height: 7px" />
     <div v-if="value && !modelSrc">
-      <figure class="image"><img :src="value + time" /></figure>
+      <figure class="image" style="border-radius: 4px; overflow: hidden">
+        <img :src="value + time" />
+      </figure>
     </div>
     <div v-if="modelSrc" style="position: fixed; top: 0; left: 0; z-index: 6">
       <div class="model" v-show="model" @click="model = false;">
@@ -76,7 +86,7 @@ export default Vue.extend({
       crap: false,
       show: true,
       img: "",
-      file: null,
+      file: null as File | null,
       time: ""
     };
   },
@@ -137,7 +147,7 @@ export default Vue.extend({
         })
         .finally(() => {
           // @ts-ignore
-          this.$refs.uploadSelect.value = "";
+          this.file = null;
           loadingComponent.close();
         });
 
@@ -154,9 +164,10 @@ export default Vue.extend({
         });
       }
     },
-    uploadImg(e: any) {
-      var file = e.target.files[0];
-      if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+    uploadImg() {
+      console.log(this.file);
+      if (this.file === null) return;
+      if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(this.file.name)) {
         alert("no image select");
         return false;
       }
@@ -174,7 +185,7 @@ export default Vue.extend({
         this.modelSrc = data;
       };
       // reader.readAsDataURL(file); // base64
-      reader.readAsArrayBuffer(file); // blob
+      reader.readAsArrayBuffer(this.file); // blob
     }
   }
 });

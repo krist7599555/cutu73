@@ -17,9 +17,15 @@ export default [
     type: "disable"
   },
   {
+    label: "ชื่อเล่น",
+    type: "text"
+  },
+  {
     label: "เพศ",
     type: "select",
-    value: ["ชาย", "หญิง"]
+    value: ["ชาย", "หญิง"],
+    icon: "venus-mars",
+    iconpack: "fas"
   },
   {
     label: "รหัสนิสิต",
@@ -49,24 +55,27 @@ export default [
   // },
   {
     label: "เบอร์โทร",
-    type: "text"
+    type: "tel",
+    icon: "phone"
   },
   {
-    label: "Line ID",
-    type: "text"
+    label: "line-ID",
+    type: "text",
+    icon: "line",
+    iconpack: "fab"
   },
-  // {
-  //   label: "lineID",
-  //   type: "text"
-  // },
-  // {
-  //   label: "facebook",
-  //   type: "text"
-  // },
-  // {
-  //   label: "instagram",
-  //   type: "text"
-  // },
+  {
+    label: "facebook",
+    type: "text",
+    icon: "facebook",
+    iconpack: "fab"
+  },
+  {
+    label: "instagram",
+    type: "text",
+    icon: "instagram",
+    iconpack: "fab"
+  },
   {
     type: "br"
   },
@@ -75,7 +84,9 @@ export default [
     type: "select",
     value: [
       "ผู้เข้าร่วมงาน",
-      "บัตรและอุปกรณ์",
+      "เสื้อ",
+      "บัตร",
+      "หนังสือ",
       "ATและทะเบียน",
       "ถ่ายภาพ",
       "วิทยุสื่อสาร",
@@ -96,10 +107,33 @@ export default [
     ]
   },
   {
+    label: "ตำแหน่ง",
+    type: "select",
+    value: [
+      "ประธานฝ่าย",
+      "รองประธานฝ่าย",
+      "เลขานุการฝ่าย",
+      "เหรัญญิกฝ่าย",
+      "รีครูท"
+    ]
+  },
+  {
+    label: "ขนาดเสื้อ",
+    type: "select",
+    icon: "tshirt",
+    iconpack: "fas",
+    value: [
+      "S  อก 36 นิ้ว - ยาว 26 นิ้ว",
+      "M  อก 38 นิ้ว - ยาว 27 นิ้ว",
+      "L  อก 40 นิ้ว - ยาว 28 นิ้ว",
+      "XL อก 42 นิ้ว - ยาว 29 นิ้ว"
+    ]
+  },
+  {
     label: "หอใน",
     type: "checkbox",
     value: ["ไม่อยู่", "อยู่"]
-  }
+  },
   // {
   //   label: "อาคาร",
   //   type: "text",
@@ -116,4 +150,20 @@ export default [
   //   value: ["A", "B", "C", "D"],
   //   show: "หอใน == 'อยู่'"
   // }
+  {
+    label: "อาหารที่แพ้",
+    type: "text",
+    icon: "skull-crossbones",
+    iconpack: "fas"
+  },
+  {
+    label: "โรคประจำตัว",
+    type: "text",
+    icon: "pills",
+    iconpack: "fas"
+  },
+  {
+    label: "หมายเหตุ",
+    type: "textarea"
+  }
 ];

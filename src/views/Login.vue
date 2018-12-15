@@ -4,8 +4,11 @@
       input.input.is-light(v-model='username' required type='text' placeholder='student id' minlength='8' maxlength="10")
     .field: .control
       input.input.is-light(v-model='password' required type='password' placeholder='password')
-    .field: .control
-      button.button.is-danger.is-outlined.is-inverted login
+    .field.is-grouped
+      .control
+        button.button.is-danger.is-outlined.is-inverted login
+      .control 
+        div(style='font-size: 0.8rem') * รหัสตาม reg chula
 </template>
 
 <script lang="ts">

@@ -27,7 +27,7 @@ const toThai = (usr: any) => {
 const url =
   process.env.NODE_ENV == "production"
     ? "/api/v1"
-    : "http://localhost:3000/api/v1";
+    : "http://www.cutu73.ml/api/v1";
 // : "http://128.199.216.159:3000/api/v1";
 // : "http://localhost:3000/api/v1";
 // "http://128.199.216.159:3000/api/v1"
@@ -68,7 +68,7 @@ export default new Vuex.Store({
           username,
           password
         }
-      }).then(() => {
+      }).then(res => {
         if (!cookie.get("ticket")) {
           alert("cookie is not set");
           throw "no ticket";

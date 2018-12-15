@@ -6,7 +6,7 @@ form(@submit.prevent='submit' v-if='auth && form_result')
     .field-body
       .field
         .control
-          File(v-model='form_result.image' className="input" :filename='form_result.รหัสนิสิต')
+          File(v-model='form_result.image' :filename='form_result.รหัสนิสิต')
 
   .field.is-narrow.is-horizontal(
     v-for='lay in form_layout'

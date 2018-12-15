@@ -35,28 +35,39 @@
   color: white;
 }
 
-.input, 
+.input,
 .button,
 .textarea,
 .select select,
 .input[disabled] {
-  &, 
-  &:hover, 
+  &,
+  &:hover,
   &:focus {
+    font-family: ChulaNew;
     background-color: #fff0 !important;
+    -webkit-background-color: #fff0 !important;
     border: solid #fff 1px !important;
     color: white !important;
-    text-align: center;
-    font-family: ChulaNew;
+    -webkit-border: solid #fff 1px !important;
+    -webkit-color: white !important;
     box-shadow: none !important;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+    -webkit-box-shadow: none !important;
+    margin: 0 auto;
+    text-align: center;
     text-align-last: center;
+    text-align: -webkit-center;
+    text-align: -moz-center;
+    padding-left: 40px;
+    padding-right: 40px;
+    /*
+    */
   }
 }
-.input[type=file],
+
+.input[type="file"],
 .input[type="file"] {
   text-align-last: left;
+  -webkit-text-align-last: left;
 }
 
 .select:not(.is-multiple):not(.is-loading)::after {
@@ -97,16 +108,18 @@ $mobile: 550px;
 .drag-icon {
   position: absolute;
   left: 7px;
-  color: #3636364b
+  color: #3636364b;
 }
 
 $form-breakpoint: 768px;
-.label__is-hidden-desktop { // touch
+.label__is-hidden-desktop {
+  // touch
   @media screen and (min-width: $form-breakpoint + 1) {
     display: none !important;
   }
 }
-.label__is-hidden-touch { // desktop
+.label__is-hidden-touch {
+  // desktop
   @media screen and (max-width: $form-breakpoint) {
     display: none !important;
   }

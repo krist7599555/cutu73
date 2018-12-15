@@ -5,6 +5,7 @@ import Home from "./views/Home.vue";
 Vue.use(Router);
 import Resize from "./views/Resize.vue";
 export default new Router({
+  mode: "history",
   routes: [
     {
       path: "/",
