@@ -1,7 +1,8 @@
 <template lang="pug">
 div
   Head
-    button.button(v-if='auth' style='position: absolute; top: 0; right: 0' @click='$store.dispatch("logout")') logout
+    .trans-input
+      button.button(v-if='auth' style='position: absolute; top: 0; right: 0' @click='$store.dispatch("logout")') logout
     Login(v-if='!auth')
     Form(v-else)
   Footer

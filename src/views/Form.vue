@@ -1,5 +1,5 @@
 <template lang="pug">
-form(@submit.prevent='submit' v-if='auth && form_result')
+form.trans-input(@submit.prevent='submit' v-if='auth && form_result')
   .field.is-narrow.is-horizontal
     .field-label.is-normal
       .label(style='white-space: normal') รูปภาพ
@@ -46,14 +46,27 @@ export default Vue.extend({
     MyInput
   },
   data() {
-    let layout = require("./input_form.js").default;
     return {
       form_result: null as any | null,
-      form_layout: layout as InputField[],
+      form_layout: [] as InputField[],
+      form_attributes: [] as string[],
       result: null
     };
   },
   async mounted() {
+    const json = await this.$store.dispatch(
+      "getText",
+      "/template/_input_form.json"
+    );
+    if (typeof json == "string") {
+      alert("_input_form.json is wrong format");
+    }
+    let layout: InputField[] = json;
+
+    this.form_layout = layout;
+    this.form_attributes = layout
+      .filter(obj => "label" in obj)
+      .map(obj => obj.label);
     this.update_result();
     if (this.auth) {
       if (!this.user) {
@@ -114,20 +127,53 @@ export default Vue.extend({
       this.$forceUpdate();
     },
     async submit() {
+      this.$dialog.confirm({
+        title: "ยืนยันข้อมูล",
+        message: "loading..",
+        cancelText: "Cancel",
+        confirmText: "Process",
+        type: "is-success",
+        onConfirm: () => this._submit()
+      });
+      this.$nextTick(() => {
+        const elem = document.getElementsByClassName("media-content");
+        elem[0].innerHTML =
+          "<table class='table'>" +
+          _.join(
+            _.map(
+              this.form_attributes,
+              k => `
+            <tr> 
+              <td>${k}</td>
+              <td>${this.form_result[k] || "------ต้องใส่ข้อมูล------"}</td>
+            </tr>`
+            ),
+            ""
+          ) +
+          "</table>";
+      });
+    },
+    async _submit() {
       const loadingComponent = this.$loading.open({
         container: null
       });
-      console.log("SUBMIT");
       this.$store
         .dispatch("submit", this.form_result)
-        .then(() =>
+        .then(() => {
           this.$toast.open({
             type: "is-success",
             message: "success submition",
             position: "is-top",
             duration: 3000
-          })
-        )
+          });
+          this.$modal.open(
+            `<p class="image is-4by6">
+                <img src="http://www.cutu73.ml/cards/${
+                  this.form_result.ouid
+                }.png?t=${new Date().getTime()}">
+            </p>`
+          );
+        })
         .catch(result => {
           this.$toast.open({
             type: "is-danger",
@@ -158,3 +204,5 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style lang="scss" scoped></style>

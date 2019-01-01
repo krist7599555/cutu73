@@ -9,7 +9,7 @@
           :multiple="false"
           :drag-drop="false"
         >
-          <a class="button is-primary is-fullwidth">
+          <a class="button is-success is-fullwidth">
             <b-icon pack="fas" icon="file-image"></b-icon>
             <span>Click to upload</span>
           </a>

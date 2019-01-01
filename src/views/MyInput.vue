@@ -6,7 +6,7 @@
   template(v-if='lay.type == "br"')
     br
   template(v-else-if='lay.type == "radio"')
-    .block
+    b-field
       b-radio(
         type='is-light'
         v-for='itm in lay.value' 
@@ -15,33 +15,36 @@
         :native-value='itm'
         :key='itm.id'
       ) {{itm}}
-  template(v-else-if='lay.type == "checkbox"')
-    .field
-      b-checkbox(
-        type='is-light'
-        :value='value'
-        @input='emit_input' 
-        :true-value="lay.value[1]"
-        :false-value="lay.value[0]"
-      ) {{value}}
+  //- template(v-else-if='lay.type == "checkbox"')
+  //-   .field
+  //-     b-checkbox(
+  //-       type='is-light'
+  //-       :value='value'
+  //-       @input='emit_input' 
+  //-       :true-value="lay.value[1]"
+  //-       :false-value="lay.value[0]"
+  //-     ) {{value}}
   template(v-else-if='lay.type == "disable"')
-    input.input(:value='value' @input='emit_input' disabled)
-  template(v-else-if='lay.type == "tel" && lay.icon')
-    b-input(type='tel' :icon-pack='lay.iconpack || "fa"' :icon='lay.icon' :value='value' @input='emit_input' :required='lay.required')
-    //- input.input(type='tel' :value='value' @input='emit_input' :required='lay.required')
-  template(v-else-if='lay.type == "text" && lay.icon')
-    b-input(:icon-pack='lay.iconpack || "fa"' :icon='lay.icon' :value='value' @input='emit_input' :required='lay.required')
-  template(v-else-if='lay.type == "text"')
-    input.input(:value='value' @input='emit_input' :required='lay.required')
+    b-field
+      b-input(:value='value' @input='emit_input' disabled)
+  template(v-else-if='(lay.type == "tel" || lay.type == "text") && lay.icon')
+    b-field
+      b-input(:type='lay.type' :icon-pack='lay.iconpack' :icon='lay.icon' :value='value' @input='emit_input' :required='lay.required')
+  template(v-else-if='(lay.type == "tel" || lay.type == "text")')
+    b-field
+      b-input(:type='lay.type' :value='value' @input='emit_input' :required='lay.required')
   template(v-else-if='lay.type == "textarea"')
-    textarea.textarea(:value='value' @input='emit_input' :placeholder="lay.placeholder" required)
+    b-field
+      b-input(type='textarea' :value='value' @input='emit_input' :placeholder="lay.placeholder" :required='lay.required')
   template(v-else-if='lay.type == "select" && lay.icon')
-    b-select(:icon-pack='lay.iconpack || "fa"' expanded :icon='lay.icon' :value='value' @input='emit_input' :required='lay.required')
+    b-field(type='is-white')
+      b-select(:icon-pack='lay.iconpack' expanded :icon='lay.icon' :value='value' @input='emit_input' :required='lay.required' :disabled='lay.disabled')
         option
         option(v-for='v in lay.value' :value='v') {{v}}
+
   template(v-else-if='lay.type == "select"')
-    .select.is-fullwidth {{lay.required}}
-      select(:value='value' @input='emit_input' :required='lay.required')
+    b-field(type='is-white')
+      b-select(expanded :value='value' @input='emit_input' :required='lay.required' :disabled='lay.disabled')
         option
         option(v-for='v in lay.value' :value='v') {{v}}
   //- template(v-else-if='lay.type == "rank"') // error
@@ -52,7 +55,7 @@
   //-         .drag-icon 
   //-           i.fa.fa-bars
   template(v-else)
-    input.input(disabled :value='`unrender type: ${lay.type}`') 
+    input.input(disabled :value='`unrender type: ${lay.type}`' style='background-color: blue') 
 </template>
 
 <script lang="ts">
@@ -62,8 +65,8 @@ import _ from "lodash";
 function getTextWidth(elem: HTMLSelectElement) {
   var canvas = document.createElement("canvas");
   var context = canvas.getContext("2d") as CanvasRenderingContext2D;
-  context.font = "1rem ChulaNew";
-  context.font;
+  context.font = `${elem.style.fontSize}px ${elem.style.fontFamily}`;
+  // console.log(context.font, elem.style.fontFamily, elem.style);
   var metrics = context.measureText(elem.value);
   // canvas.toBlob(blob => {
   //   console.log(URL.createObjectURL(blob));
@@ -81,6 +84,11 @@ export default Vue.extend({
       case "tel":
         this.emit_input(this.value || "");
     }
+    this.$nextTick(this.align_select_center);
+  },
+  mounted() {
+    this.align_select_center();
+    this.$forceUpdate();
   },
   methods: {
     emit_input(e: any) {
@@ -96,11 +104,22 @@ export default Vue.extend({
     align_select_center() {
       const elems = document.getElementsByTagName("select");
       for (const e of elems) {
+        e.style.fontFamily = "ChulaNew";
+        e.style.marginLeft = "0";
         const txtsz = getTextWidth(e);
-        const boxsz = e.clientWidth;
+        const boxsz = e.offsetWidth;
         const pad = (boxsz - txtsz) / 2;
-        e.style.paddingLeft = pad + "px";
-        e.style.paddingRight = pad + "px";
+        if (window.outerWidth <= 768) {
+          e.style.paddingLeft = pad - 13 + "px";
+          e.style.paddingRight = 0 + "px";
+        } else {
+          e.style.paddingLeft = pad + "px";
+          e.style.paddingRight = 0 + "px";
+        }
+        // console.log(pad);
+        // console.log(e.style.paddingLeft, e.style.paddingRight);
+        // if (window.outerWidth <= 768)
+        //   e.style.paddingRight = e.style.paddingLeft = 0 + "px";
       }
     }
   },

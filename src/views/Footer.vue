@@ -9,7 +9,9 @@
             .is-size-7 หากมีปัญหาใดๆ เกี่ยวกับระบบรับสมัครสามารถติดต่อได้ที่
             ul.is-size-7
               li กฤษฏิ์ #[a(href='tel:0900206430') 090-020-6430]
-              li #[a(href='https://docs.google.com/spreadsheets/d/1QPngfRupOBWfFwzgJITTY2IHwEYjAHdVmUMs77JBFkI/edit?usp=sharing') sheet]
+              li #[router-link(to='/records') records]
+              li #[router-link(to='/generate') generate]
+
               
 </template>
 

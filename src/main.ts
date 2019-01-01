@@ -16,7 +16,7 @@ dom.watch();
 // import "buefy/types/components.d"
 import Buefy from "buefy";
 // import "buefy/types/index.d"
-Vue.use(Buefy);
+Vue.use(Buefy, { defaultIconPack: "fa" });
 // const checkbox = require("buefy/dist/components/checkbox");
 // Vue.use(checkbox);
 // const toast = require("buefy/dist/components/toast");

@@ -40,6 +40,14 @@ export default new Vuex.Store({
     },
     auth(state) {
       return state.ticket;
+    },
+    async getall(state) {
+      return await axios({
+        url: url + "/db/query/get-all?limit=1000",
+        headers: {
+          password: "superstrongpassword"
+        }
+      }).then(res => res.data.data);
     }
   },
   mutations: {
@@ -67,6 +75,9 @@ export default new Vuex.Store({
           password
         }
       }).then(res => {
+        // if (process.env.NODE_ENV != "production") {
+        cookie.set("ticket", res.data, { expires: 1 });
+        // }
         if (!cookie.get("ticket")) {
           alert("cookie is not set");
           throw "no ticket";
@@ -90,6 +101,9 @@ export default new Vuex.Store({
         headers: {
           "Content-Type": "application/json"
         }
+      }).then(async res => {
+        await state.dispatch("getCard");
+        return res;
       });
     },
     async upload(state, formData) {
@@ -103,7 +117,8 @@ export default new Vuex.Store({
         headers: {
           "Content-Type": "multipart/form-data"
         }
-      }).then(x => {
+      }).then(async x => {
+        await state.dispatch("getCard");
         return x.data;
       });
     },
@@ -126,6 +141,26 @@ export default new Vuex.Store({
         state.commit("setUser", null);
         state.commit("removeTicket");
       }
+    },
+    async getCard(state) {
+      return await axios({
+        method: "GET",
+        url: url + "/user/card/" + state.getters.user.ouid
+      }).then(() => url + "/cards/" + state.getters.user.ouid + ".png");
+    },
+    async getCard2(state, ouid) {
+      return await axios({
+        method: "GET",
+        url: url + "/user/card/" + ouid
+      }).then(() => url + "/cards/" + ouid + ".png");
+    },
+    async getText(state, path) {
+      return await axios
+        .get(url.replace("/api/v1", "") + path)
+        .then(res => res.data);
+    },
+    async setText(state, { path, value }) {
+      return await axios.post(url + "/file/setText", { path, value });
     }
   }
 });

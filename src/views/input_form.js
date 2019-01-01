@@ -1,4 +1,9 @@
-export default [
+import Vue from "vue";
+// export default async function(store) {
+//   return JSON.parse(store.dispatch("getText", "_input_form.json"));
+// }
+
+const OLD = [
   // {
   //   label: "รูปภาพ",
   //   type: "image"
@@ -25,7 +30,8 @@ export default [
     type: "select",
     value: ["ชาย", "หญิง"],
     icon: "venus-mars",
-    iconpack: "fas"
+    iconpack: "fas",
+    disabled: true
   },
   {
     label: "รหัสนิสิต",
@@ -56,26 +62,30 @@ export default [
   {
     label: "เบอร์โทร",
     type: "tel",
-    icon: "phone"
+    icon: "phone",
+    iconpack: "fa",
+    required: true
   },
   {
     label: "line-ID",
     type: "text",
     icon: "line",
-    iconpack: "fab"
+    iconpack: "fab",
+    required: true
   },
   {
     label: "facebook",
     type: "text",
     icon: "facebook",
-    iconpack: "fab"
+    iconpack: "fab",
+    required: true
   },
-  {
-    label: "instagram",
-    type: "text",
-    icon: "instagram",
-    iconpack: "fab"
-  },
+  // {
+  //   label: "instagram",
+  //   type: "text",
+  //   icon: "instagram",
+  //   iconpack: "fab"
+  // },
   {
     type: "br"
   },
@@ -93,9 +103,7 @@ export default [
       "สวัสดิการ",
       "สถานที่",
       "พยาบาล",
-      "ประสาน กบจ.",
-      "ประสานจุดนัดพบ",
-      "ประสานขบวน",
+      "ประสาน",
       "หลบฝน",
       "ประธานจัดงาน",
       "รองประธานจัดงาน",
@@ -104,7 +112,8 @@ export default [
       "ประสาน",
       "เลขา",
       "เหรัญญิก"
-    ]
+    ],
+    required: true
   },
   {
     label: "ตำแหน่ง",
@@ -127,11 +136,15 @@ export default [
       "M  อก 38 นิ้ว - ยาว 27 นิ้ว",
       "L  อก 40 นิ้ว - ยาว 28 นิ้ว",
       "XL อก 42 นิ้ว - ยาว 29 นิ้ว"
-    ]
+    ],
+    required: true
+  },
+  {
+    type: "br"
   },
   {
     label: "หอใน",
-    type: "checkbox",
+    type: "radio", //"checkbox",
     value: ["ไม่อยู่", "อยู่"]
   },
   // {
@@ -151,19 +164,28 @@ export default [
   //   show: "หอใน == 'อยู่'"
   // }
   {
+    type: "br"
+  },
+  {
     label: "อาหารที่แพ้",
     type: "text",
+    placeholder: "หากไม่มีให้ใส่ -",
     icon: "skull-crossbones",
-    iconpack: "fas"
+    iconpack: "fas",
+    required: true
   },
   {
     label: "โรคประจำตัว",
     type: "text",
+    placeholder: "หากไม่มีให้ใส่ -",
     icon: "pills",
-    iconpack: "fas"
+    iconpack: "fas",
+    required: true
   },
   {
     label: "หมายเหตุ",
-    type: "textarea"
+    type: "textarea",
+    placeholder: "หากไม่มีให้ใส่ -",
+    required: true
   }
 ];

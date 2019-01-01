@@ -1,5 +1,5 @@
 <template lang="pug">
-  form(@submit='submit')
+  form.trans-input(@submit='submit')
     .field: .control
       input.input.is-light(v-model='username' required type='text' placeholder='student id' minlength='8' maxlength="10")
     .field: .control
