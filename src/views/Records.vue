@@ -25,7 +25,7 @@ div
           b-table-column(field="เบอร์โทร" label="เบอร์โทร")
             a(style='text-decoration: underline' :href='"tel://" + (props.row.เบอร์โทร || "").replace("-", "")') {{props.row.เบอร์โทร}}
           b-table-column(field="Line ID" label="Line ID")
-            a(style='text-decoration: underline' :href='"line://ti/p/" + props.row["line-ID"]') {{ props.row["line-ID"] }}
+            a(style='text-decoration: underline' :href='"line://ti/p/~" + props.row["line-ID"]') {{ props.row["line-ID"] }}
                 
         
         template(slot="detail" slot-scope="props")
