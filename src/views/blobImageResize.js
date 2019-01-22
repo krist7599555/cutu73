@@ -1,8 +1,8 @@
 import _ from "lodash";
 
 const defaultConfig = {
-  width: 600,
-  height: 600,
+  width: 800,
+  height: 800,
   distord: false,
   type: "image/jpeg"
 };
@@ -44,11 +44,6 @@ export default function blobImageResize(blob, option) {
       context.drawImage(img, 0, 0, w, h);
       context.canvas.toBlob(
         outblob => {
-          // console.log(
-          //   `compress: in ${blob.size} out ${outblob.size} [${blob.type} => ${
-          //     outblob.type
-          //   }]`
-          // );
           resolve(outblob);
         },
         type,

@@ -62,7 +62,6 @@ import PrismEditor from "vue-prism-editor";
 import cookie from "js-cookie";
 
 @Component({
-  computed: mapGetters(["getall"]),
   components: {
     Head,
     Footer,
@@ -70,24 +69,7 @@ import cookie from "js-cookie";
   }
 })
 export default class GenerateCard extends Vue {
-  tabs = `test.json
-_input_form.json
-_main.json
-allarea.json
-ceremony.json
-coronet.json
-field.json
-followers.json
-general.json
-nurse.json
-press.json
-reception.json
-sponsor.json
-stage.json
-stand.json
-timer.json
-vip.json
-visitor.json`.split("\n");
+  tabs = `_main.json _config.json _input_form.json _admin.json`.split(" ");
   conf = "";
   edit = false;
   curr = "";
@@ -95,41 +77,6 @@ visitor.json`.split("\n");
   time = 0;
 
   async mounted() {
-    let password = "";
-    while (!cookie.get("allowgenerate") && password != "ballball") {
-      await new Promise((res, rej) => {
-        this.$dialog.prompt({
-          message: `ต้องการรหัสผ่านเพื่อดำเนินการต่อ?`,
-          type: "is-warning",
-          inputAttrs: {
-            placeholder: "รหัสผ่าน...",
-            maxlength: 10,
-            type: "password"
-          },
-          confirmText: "ไปต่อ",
-          cancelText: "ยกเลิก",
-          onConfirm: value => {
-            password = value;
-            console.log(password);
-            res();
-          },
-          onCancel: () => {
-            this.$router.push("/");
-            this.$toast.open({
-              message: "redirect to main page",
-              type: "is-warning"
-            });
-            rej();
-          }
-        });
-      });
-    }
-
-    cookie.set("allowgenerate", "true", { expires: 1 });
-    this.$toast.open({
-      type: "is-success",
-      message: "wellcome to setting page"
-    });
     this.click("_main.json");
   }
 
@@ -137,13 +84,15 @@ visitor.json`.split("\n");
     tab = tab.replace("/template/", "");
     this.edit = false;
     this.curr = "/template/" + tab;
-    this.conf = await this.$store.dispatch("getText", this.curr).then(res => {
-      if (res instanceof Array || res instanceof Object) {
-        return JSON.stringify(res, null, 2);
-      } else {
-        return res;
-      }
-    });
+    this.conf = await this.$store
+      .dispatch("file/getText", this.curr)
+      .then(res => {
+        if (res instanceof Array || res instanceof Object) {
+          return JSON.stringify(res, null, 2);
+        } else {
+          return res;
+        }
+      });
   }
   @Watch("conf")
   _edit() {
@@ -158,7 +107,7 @@ visitor.json`.split("\n");
       container: null
     });
     this.$store
-      .dispatch("setText", {
+      .dispatch("file/setText", {
         path: this.curr,
         value: this.conf
       })
@@ -177,12 +126,21 @@ visitor.json`.split("\n");
       container: null
     });
     await Promise.all(
-      this._watchs.map(id => this.$store.dispatch("getCard2", id))
-    ).finally(loadingComponent.close);
-    this.$toast.open({
-      message: "รอสักครู่",
-      type: "is-info"
-    });
+      this._watchs.map(id => this.$store.dispatch("file/getCard", id))
+    )
+      .then(() =>
+        this.$toast.open({
+          message: "รอสักครู่",
+          type: "is-info"
+        })
+      )
+      .catch(() =>
+        this.$toast.open({
+          message: "เกิดปัญหาขึ้น กรุณาลองใหม่",
+          type: "is-danger"
+        })
+      )
+      .finally(loadingComponent.close);
     this.time += 1;
   }
 }

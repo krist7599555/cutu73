@@ -13,15 +13,20 @@ div
         :pagination-simple="true"
         detailed
         detail-key="รหัสนิสิต"
-        icon-pack='fab'
+        icon-pack='fas'
         hoverable
       )
         template(slot-scope="props")
           b-table-column(field="img" label="รูปภาพ" centered :visible='userImage')
-            figure.image.user
-              img(:src='props.row.image')
+            div(style='white-space:nowrap;')
+              //- figure.is-inline.image.user
+              img.is-inline(:src='props.row.image' style='max-width: 150px')
+              //- img.is-inline(:src='props.row.image' style='max-width: 150px')
+              img.is-inline(@click='runCard(props.row.ouid)' :src='`http://www.cutu73.ml/cards/${props.row.ouid}.png`' style='max-width: 150px')
+              //- figure.is-inline.image.user(@click='runCard(props.row.ouid)')
           template(v-for='atr in attributes')
-            b-table-column(:field="atr" :label="atr" sortable) {{ props.row[atr] }}
+            b-table-column(:field="atr" :label="atr" sortable) 
+              div(@click='atr == "ฝ่าย" ? updateRole(props.row.ouid, props.row.ฝ่าย) : null') {{ props.row[atr] }}
           b-table-column(field="เบอร์โทร" label="เบอร์โทร")
             a(style='text-decoration: underline' :href='"tel://" + (props.row.เบอร์โทร || "").replace("-", "")') {{props.row.เบอร์โทร}}
           b-table-column(field="Line ID" label="Line ID")
@@ -33,7 +38,7 @@ div
                 <figure class="media-left">
                     figure.image(style='max-width: 200px')
                       img.is-hidden-mobile(:src='props.row.image')
-                      img.is-hidden-tablet(:src='`http://www.cutu73.ml/cards/${props.row.ouid}.png`')
+                      img.is-hidden-tablet(:src='getCard(props.row.ouid)')
                 </figure>
                 <div class="media-content">
                     <div class="content">
@@ -51,16 +56,16 @@ div
                 </div>
                 <figure class="media-right is-hidden-mobile">
                     figure.image(style='max-width: 200px')
-                      img(:src='`http://www.cutu73.ml/cards/${props.row.ouid}.png`')
+                      img(:src='getCard(props.row.ouid)')
                 </figure>
             </article>
-        
   Footer
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { mapGetters } from "vuex";
+import { Action } from "vuex-class";
 import Head from "./Head.vue";
 import Footer from "./Footer.vue";
 import _ from "lodash";
@@ -71,7 +76,7 @@ import _ from "lodash";
     Footer
   }
 })
-export default class Home extends Vue {
+export default class Records extends Vue {
   _records = [];
   records = [];
   loading = true;
@@ -79,27 +84,80 @@ export default class Home extends Vue {
   attributes = "รหัสนิสิต ชื่อ สกุล ชื่อเล่น ฝ่าย ตำแหน่ง".split(" ");
   search = "";
   async mounted() {
-    this._records = await this.$store.getters.getall;
+    this._records = await this.$store.getters["auth/getall"];
     this.comprecords();
     this.loading = false;
   }
+
+  suffix = 0;
+  getCard(ouid: string) {
+    return `http://www.cutu73.ml/cards/${ouid}.png?t=${this.suffix}`;
+  }
+  // @ts-ignore
+  @Action("auth/getCard") genCard;
+  runCard(ouid: string) {
+    this.$dialog.confirm({
+      type: "is-warning",
+      message: "confirm gen card",
+      onConfirm: () => {
+        const load = this.$loading.open({});
+        this.genCard(ouid)
+          .then(() => {
+            this.suffix += 1;
+            this.$forceUpdate();
+            this.$toast.open("สักครู่");
+          })
+          .finally(load.close);
+      }
+    });
+    return this.getCard(ouid);
+  }
+
   @Watch("search")
+  // @ts-ignore
   comprecords() {
     const patterns = this.search.split(" ").map(s => RegExp(s));
     return (this.records = this._records.filter(row => {
       const str = JSON.stringify(row).replace(/[:",]/g, "\n");
-      console.log(patterns, str);
+      // console.log(patterns, str);
       return _.every(patterns, p => p.test(str));
     }));
+  }
+  updateRole(ouid, ฝ่าย) {
+    this.$dialog.prompt({
+      message: `กำหนดฝ่ายใหม่`,
+      inputAttrs: {
+        placeholder: "กรุณาเติมฝ่าย",
+        value: ฝ่าย
+      },
+      onConfirm: value =>
+        this.$store
+          .dispatch("auth/updateRole", {
+            ouid: ouid,
+            ฝ่าย: value
+          })
+          .then(user => {
+            // @ts-ignore
+            this._records = this._records.map(u =>
+              // @ts-ignore
+              u.ouid == user.ouid ? user : u
+            );
+            this.comprecords();
+            this.$toast.open({
+              message: "update success",
+              type: "is-success"
+            });
+          })
+    });
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .user.image {
-  max-width: 100px;
+  max-width: 120px;
   @media screen and (max-width: 768px) {
-    max-width: 130px;
+    max-width: 150px;
   }
 }
 </style>

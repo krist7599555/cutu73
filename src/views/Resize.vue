@@ -7,7 +7,7 @@
         :class="className"
         style="text-align-last: left"
         accept="image/png, image/jpeg, image/gif, image/jpg"
-        @change="uploadImg($event, 1);"
+        @change="uploadImg($event, 1)"
       />
       <!-- style="position:absolute; clip:rect(0 0 0 0);" -->
     </div>
@@ -15,7 +15,7 @@
       <figure class="image"><img :src="value + time" /></figure>
     </div>
     <div v-if="modelSrc" style="position: fixed; top: 0; left: 0; z-index: 6">
-      <div class="model" v-show="model" @click="model = false;">
+      <div class="model" v-show="model" @click="model = false">
         <div class="model-show"><img :src="modelSrc" alt="" /></div>
       </div>
 
@@ -43,9 +43,9 @@
         ></vue-cropper>
       </div>
       <div class="test-button" style="position: absolute; right: 0; top: 0;">
-        <button class="btn" @click="finish('blob');">finish</button>
+        <button class="btn" @click="finish('blob')">finish</button>
         <!-- <button class="btn" @click="finish('base64');">base64</button> -->
-        <button class="btn" @click="img = '';">cancel</button>
+        <button class="btn" @click="img = ''">cancel</button>
         <!-- <label class="btn" for="uploads">upload</label> -->
         <!--
           <input

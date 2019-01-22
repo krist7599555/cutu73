@@ -1,8 +1,8 @@
 <template lang="pug">
 div
   Head
-    .trans-input
-      button.button(v-if='auth' style='position: absolute; top: 0; right: 0' @click='$store.dispatch("logout")') logout
+    .trans-input 
+      button.button(v-if='auth' style='position: absolute; top: 0; right: 0' @click='$store.dispatch("auth/logout")') logout
     Login(v-if='!auth')
     Form(v-else)
   Footer
@@ -12,14 +12,13 @@ div
 // import Vue from "vue";
 // import Component from "vue-class-component";
 import { Vue, Component } from "vue-property-decorator";
-import { mapGetters } from "vuex";
+import { Getter } from "vuex-class";
 import Head from "./Head.vue";
 import Form from "./Form.vue";
 import Footer from "./Footer.vue";
 import Login from "./Login.vue";
 
 @Component({
-  computed: mapGetters(["auth"]),
   components: {
     Head,
     Login,
@@ -27,7 +26,9 @@ import Login from "./Login.vue";
     Footer
   }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  @Getter("auth/auth") auth: any;
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -4,7 +4,7 @@
       <b-field class="file">
         <b-upload
           v-model="file"
-          @input="uploadImg($event);"
+          @input="uploadImg($event)"
           accept="image/png, image/jpeg, image/gif, image/jpg"
           :multiple="false"
           :drag-drop="false"
@@ -21,10 +21,11 @@
     <div v-if="value && !modelSrc">
       <figure class="image" style="border-radius: 4px; overflow: hidden">
         <img :src="value + time" />
+        <!-- <span>{{ value }} {{ time }}</span> -->
       </figure>
     </div>
     <div v-if="modelSrc" style="position: fixed; top: 0; left: 0; z-index: 6">
-      <div class="model" v-show="model" @click="model = false;">
+      <div class="model" v-show="model" @click="model = false">
         <div class="model-show"><img :src="modelSrc" alt /></div>
       </div>
 
@@ -50,7 +51,7 @@
         ></vue-cropper>
       </div>
       <div class="test-button" style="position: absolute; right: 0; top: 0;">
-        <button type="button" class="btn" @click="finish('blob');">
+        <button type="button" class="btn" @click="finish('blob')">
           finish
         </button>
         <button type="button" class="btn" @click="cancel">cancel</button>
@@ -63,7 +64,6 @@
 import Vue from "vue";
 import compressBlob from "./blobImageResize";
 // @ts-ignore
-// import { VueCropper } from "vue-cropper";
 import VueCropper from "../components/vue-cropper/vue-cropper";
 export default Vue.extend({
   components: {
@@ -133,36 +133,31 @@ export default Vue.extend({
       const loadingComponent = this.$loading.open({
         container: null
       });
-      let data = new FormData();
-      data.append("image", await compressBlob(blob), this.filename);
-      await this.$store
-        .dispatch("upload", data)
-        .then(url => {
-          this.$emit("input", url);
-          this.modelSrc = "";
-          this.time = "?t=" + new Date().getTime();
+      await Promise.all(
+        ["jpeg", "png"].map(async typ => {
+          return this.$store.dispatch("file/uploadImage", {
+            image: await compressBlob(blob),
+            name: String(this.filename) + "." + typ,
+            path: "/user"
+          });
+        })
+      )
+        .then(urls => {
+          for (let url of urls) {
+            console.log(url);
+            this.$emit("input", url);
+            this.modelSrc = "";
+            this.time = "?t=" + new Date().getTime();
+          }
         })
         .catch(err => {
           alert("error occur via upload");
+          console.error(err);
         })
         .finally(() => {
-          // @ts-ignore
           this.file = null;
           loadingComponent.close();
         });
-
-      // MAKE MORE BACK UP AS MANY TYPE
-      for (const typ of ["jpeg", "png"]) {
-        let data = new FormData();
-        data.append(
-          "image",
-          await compressBlob(blob, { type: "image/" + typ }),
-          this.filename + "." + typ
-        );
-        this.$store.dispatch("upload", data).then(res => {
-          // console.log(typ, ":", res);
-        });
-      }
     },
     uploadImg() {
       console.log(this.file);

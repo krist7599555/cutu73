@@ -31,7 +31,7 @@ export default Vue.extend({
         container: null
       });
       this.$store
-        .dispatch("login", {
+        .dispatch("auth/login", {
           username: this.username,
           password: this.password
         })
