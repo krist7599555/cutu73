@@ -1,28 +1,35 @@
 <template lang="pug">
-form.trans-input(@submit.prevent='submit' v-if='auth && form_result')
-  .field.is-narrow.is-horizontal
-    .field-label.is-normal
-      .label(style='white-space: normal') รูปภาพ
-    .field-body
-      .field
-        .control
-          File(v-model='form_result.image' :filename='form_result.รหัสนิสิต')
-  br
-  .field.is-narrow.is-horizontal(
-    v-for='lay in form_layout'
-  )
-    .field-label.is-normal
-      .label(v-show='!lay.hidden_label') {{lay.label}}
-    .field-body
-      .field
-        MyInput(:value='form_result[lay.label]' @input='handleInput($event, lay.label)' :lay='lay')
-  .field.is-narrow.is-horizontal
-    .field-label.is-normal
-    .field-body
-      .field
-        .control
-          br
-          button.button.is-danger.is-outlined.is-inverted(type='submit') SUBMIT
+div
+  template(v-if='form_result')
+    b-message(v-if='String(form_result.status || "").indexOf("OK") != -1' type="is-success" has-icon) {{form_result.status}} #[br] รันบัตรเรียบร้อยดี
+    b-message(v-else-if='String(form_result.status || "").indexOf("FAIL") != -1' type="is-danger" has-icon) {{form_result.status}} #[br] บัตรอาจจะเกิดปัญหาหรือรูปภาพไม่ผ่าน
+    b-message(v-else type="is-info" has-icon) ยังไม่ได้รับการตรวจสอบข้อมูล
+  //- h1.title(style='margin: 6px') ปิดระบบ รอบที่ 1
+  form.trans-input(@submit.prevent='submit' v-if='auth && form_result')
+    .field.is-narrow.is-horizontal
+      .field-label.is-normal
+        .label(style='white-space: normal') รูปภาพ
+      .field-body
+        .field
+          .control
+            p.help ** เป็นภาพถ่ายครึ่งตัว หน้าตรง เห็นใบหน้าชัดเจน
+            File(v-model='form_result.image' :filename='form_result.รหัสนิสิต')
+    br
+    .field.is-narrow.is-horizontal(
+      v-for='lay in form_layout'
+    )
+      .field-label.is-normal
+        .label(v-show='!lay.hidden_label') {{lay.label}}
+      .field-body
+        .field
+          MyInput(:value='form_result[lay.label]' @input='handleInput($event, lay.label)' :lay='lay')
+    .field.is-narrow.is-horizontal
+      .field-label.is-normal
+      .field-body
+        .field
+          .control
+            br
+            button.button.is-danger.is-outlined.is-inverted(type='submit') SUBMIT
 </template>
 
 <script lang="ts">
@@ -126,7 +133,7 @@ export default class From extends Vue {
   async submit() {
     this.$dialog.confirm({
       title: "ยืนยันข้อมูล",
-      message: "loading..",
+      message: "loading.. (สามารถกดข้ามได้)",
       cancelText: "Cancel",
       confirmText: "Process",
       type: "is-success",
@@ -134,7 +141,7 @@ export default class From extends Vue {
     });
     this.$nextTick(() => {
       const elem = document.getElementsByClassName("media-content");
-      elem[0].innerHTML =
+      elem[elem.length - 1].innerHTML =
         "<table class='table'>" +
         _.join(
           _.map(

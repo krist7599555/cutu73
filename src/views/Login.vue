@@ -1,4 +1,6 @@
 <template lang="pug">
+div
+  div(style='font-size: 0.8rem') * update 29 Jan 00:50
   form.trans-input(@submit='submit')
     .field: .control
       input.input.is-light(v-model='username' required type='text' placeholder='student id' minlength='8' maxlength="10")

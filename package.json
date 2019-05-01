@@ -25,6 +25,7 @@
     "gm": "^1.23.1",
     "js-cookie": "^2.2.0",
     "js-cookies": "^1.0.4",
+    "local-storage": "^2.0.0",
     "lodash": "^4.17.11",
     "prismjs": "^1.15.0",
     "register-service-worker": "^1.0.0",
@@ -38,7 +39,8 @@
     "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1",
     "vuex-class": "^0.3.1",
-    "vuex-type-helper": "^1.2.0"
+    "vuex-type-helper": "^1.2.0",
+    "xlsexport": "^1.5.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",

@@ -25,7 +25,7 @@ export default {
     auth: (state: State) => state.ticket,
     async getall(state: State) {
       return await axios({
-        url: url + "/db/query/get-all?limit=1000",
+        url: url + "/db/query/get-all?limit=10000",
         headers: {
           password: "superstrongpassword"
         }
@@ -61,7 +61,7 @@ export default {
     ) {
       return axios({
         method: "POST",
-        url: url + "/user/login",
+        url: url + "/user/login" + (process.env.NODE_ENV == "production" ? "" : "?force=1"),
         withCredentials: true, // setting cookie
         data: {
           username,
@@ -183,9 +183,7 @@ export default {
       return await axios.post(url + "/file/setText", { path, value });
     },
     updateRole(_, { ouid, ฝ่าย }) {
-      return axios
-        .post(url + "/user/updateRole", { ouid, ฝ่าย })
-        .then(res => res.data);
+      return axios.post(url + "/user/updateRole", { ouid, ฝ่าย }).then(res => res.data);
     }
   }
 };

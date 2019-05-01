@@ -2,6 +2,9 @@
 div
   Head(:big='true')
     .box(style='font-size: 13px; max-width: unset')
+      .buttons
+        button.button.is-rounded.is-small.is-success(@click='download("xls")') Download Excel
+        button.button.is-rounded.is-small.is-info(@click='download("csv")') Download Csv
       b-field(grouped group-multiline)
         b-input(rounded icon-pack='fa' icon="search" v-model='search' type="search" placeholder="Search...")
         b-switch(v-model="userImage") รูปภาพ
@@ -69,6 +72,9 @@ import { Action } from "vuex-class";
 import Head from "./Head.vue";
 import Footer from "./Footer.vue";
 import _ from "lodash";
+
+import XlsExport from "xlsexport";
+
 @Component({
   computed: mapGetters(["getall"]),
   components: {
@@ -88,7 +94,17 @@ export default class Records extends Vue {
     this.comprecords();
     this.loading = false;
   }
-
+  download(type: string) {
+    const title = `cutu73_data_${new Date().getTime()}`;
+    var xls = new XlsExport(this._records, title);
+    if (type == "xls") {
+      xls.exportToXLS(`${title}.xls`);
+    } else if (type == "csv") {
+      xls.exportToCSV(`${title}.csv`);
+    } else {
+      console.error("type is", type, "not found");
+    }
+  }
   suffix = 0;
   getCard(ouid: string) {
     return `http://www.cutu73.ml/cards/${ouid}.png?t=${this.suffix}`;

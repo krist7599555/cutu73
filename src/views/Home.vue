@@ -3,6 +3,7 @@ div
   Head
     .trans-input 
       button.button(v-if='auth' style='position: absolute; top: 0; right: 0' @click='$store.dispatch("auth/logout")') logout
+    //- h1.title(style='margin: 6px') ปิดระบบ รอบที่ 1
     Login(v-if='!auth')
     Form(v-else)
   Footer
